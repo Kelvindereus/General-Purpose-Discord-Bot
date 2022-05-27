@@ -80,6 +80,6 @@ async def clear_error(ctx, error):
 
 
 
-bot.run('OTc5NDE1MjE3MzM3NDAxNDI0.GMiMdd._6sToDhWTkrFgb6Wgf4DEILlDS4jb2GjoC-WKM')  # Where 'TOKEN' is your bot token
+bot.run('')  # Where 'TOKEN' is your bot token
 
   
