@@ -44,9 +44,7 @@ async def on_message(message):
             else:
                 await message.channel.send("Sorry, deze functie is niet toegankelijk voor het plebs... uh ik bedoel mensen zonder administrator permissies")
 
-    elif message.content.lower() == "!keldevs.birtdayin":
-        await birthday(message)
-   
+
 
 async def pingtest(message):
     before = time.monotonic()
@@ -79,8 +77,6 @@ async def purge(limit, message):
     await message.delete()
     await s.delete()
 
-async def birtdayin(message):
-    
 
 
 
@@ -99,8 +95,5 @@ async def birtdayin(message):
 
 
 
-bot.run('DETOKEN')  # Dit is de bot token!
 
-
-
-  
+bot.run('')  # Dit is de bot token!
