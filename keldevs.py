@@ -20,20 +20,21 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     global messaged
-
-    if message.content.lower() == "!keldevs.jm":
-        await message.channel.send("Je moeder!")
-
-    elif message.content.lower() == "!keldevs.pingtest":
-        await pingtest(message)
-
-    elif message.content.lower() == "!keldevs.helpmij":
-        await helpmij(message)
-
-    elif message.content.lower() == "!keldevs.sysops":
-        await sysops(message)
-
-    elif message.content.lower() == "ad.purge":
+    
+    if message.content.lower().find(prefix) != 0:
+        return
+    
+    command = message.content.lower().replace(prefix, "", 1)
+    match command:
+        case "jm":
+            await message.channel.send("Je moeder!")
+        case "pingtest":
+            await pingtest(message)
+        case "helpmij:
+            await helpmij(message)
+        case "sysops":
+            await sysops(message)
+        case "purge":
             if message.author.guild_permissions.administrator:
                 p = 0
                 p = int(message.content.split(" ")[1])
