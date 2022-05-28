@@ -5,14 +5,39 @@ import asyncio
 from discord.ext import commands
 import time
 import mysql.connector
+import random
+import json
+import logging
+
+#log naar een file
+logging.basicConfig(
+        filename='example.log',
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=logging.INFO,
+        datefmt='%Y-%m-%d %H:%M:%S')
+
+logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.INFO)
+logging.debug('')
+logging.info('')
+logging.warning('')
+
 
 prefix = "!keldevs."
 bot = commands.Bot(command_prefix=prefix)
 
+
+
+
+
+
+
+
+
 messaged = []
 @bot.event
 async def on_ready():
-        print("Alles is klaar om te goan!")
+    logging.info("Alles is klaar om te goan!")
+
 
 
 
@@ -23,26 +48,49 @@ async def on_message(message):
 
     if message.content.lower() == "!keldevs.jm":
         await message.channel.send("Je moeder!")
+        logging.info("!keldevs.jm uitgevoerd door {}".format(message.author))
+
 
     elif message.content.lower() == "!keldevs.pingtest":
-        await pingtest(message)
+        if message.author.guild_permissions.administrator:
+            await pingtest(message)
+            logging.info("Allowed pingtest voor {}".format(message.author))
+        else:
+             await message.channel.send("Je hebt niet de nodige rechten om dit command uit te voeren. Sorry pik!")
+             logging.warning("Denied pingtest van {}".format(message.author))    
+
 
     elif message.content.lower() == "!keldevs.helpmij":
         await helpmij(message)
+        logging.info("!keldevs.helpmij uitgevoerd door {}".format(message.author))
+
 
     elif message.content.lower() == "!keldevs.sysops":
-        await sysops(message)
+        if message.author.guild_permissions.administrator:
+            await sysops(message)
+            logging.info("Allowed sysops door {}".format(message.author))
+        else:
+             await message.channel.send("Je hebt niet de nodige rechten om dit command uit te voeren. Sorry pik!")
+             logging.info("denied sysops van {}".format(message.author))    
 
-    elif message.content.lower() == "ad.purge":
-            if message.author.guild_permissions.administrator:
-                p = 0
-                p = int(message.content.split(" ")[1])
-                if (p != 0):
-                    purge(limit, m)
-                else:
-                    await message.channel.send("Flapdrol, ik moet wel weten hoeveel berichten ik moet verwijderen")
-            else:
-                await message.channel.send("Sorry, deze functie is niet toegankelijk voor het plebs... uh ik bedoel mensen zonder administrator permissies")
+    elif message.content.startswith("!keldevs.purge "):
+        if message.author.guild_permissions.administrator:
+          limit_amount = int(message.content.split("!keldevs.purge ")[1])
+          await message.channel.purge(limit = limit_amount)
+          logging.info("Allowed purge door {}".format(message.author)) 
+        else:
+             await message.channel.send("Je hebt niet de nodige rechten om dit command uit te voeren. Sorry pik!")
+             logging.info("denied purge van {}".format(message.author))                
+
+    elif message.content.startswith("!keldevs.wiebenik"):
+        if message.author.guild_permissions.administrator:
+            await message.channel.send("Je bent admin")
+            logging.info("!keldevs.wiebenik uitgevoerd door {}".format(message.author))
+        else:
+             await message.channel.send("Je hebt niet de nodige rechten om dit command uit te voeren. Sorry pik!")
+             logging.war("denied purge van {}".format(message.author))                
+
+
 
 
 
@@ -68,15 +116,6 @@ async def sysops(message):
         embedVar.add_field(name="IP", value="10.0.0.22", inline=True)             
         embedVar.add_field(name="VMID", value="108", inline=True)
         message = await message.channel.send(embed=embedVar)
-
-async def purge(limit, message):
-    global guild
-    await message.channel.purge(limit=l)
-    s = await message.channel.send("purged by " + message.author.name)
-    sleep(5000)
-    await message.delete()
-    await s.delete()
-
 
 
 
